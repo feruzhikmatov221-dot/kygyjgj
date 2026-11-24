@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScoreZone — Jonli sport natijalari</title>
+<style>
+:root{--bg:#101318;--panel:#191e26;--panel2:#202733;--line:#2b3441;--text:#f3f5f8;--muted:#9aa5b4;--green:#a8f05a;--red:#ff626d;--blue:#69a9ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,system-ui,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}
+.top{height:68px;background:#151a21;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:28px;padding:0 max(22px,calc((100% - 1240px)/2));position:sticky;top:0;z-index:5}
+.logo{font-size:23px;font-weight:900;letter-spacing:-1px;white-space:nowrap}.logo b{color:var(--green)}.nav{display:flex;gap:7px}.nav button,.right button{background:transparent;border:0;color:var(--muted);padding:10px 13px;border-radius:9px}.nav button.active,.nav button:hover{background:var(--panel2);color:var(--text)}.right{margin-left:auto;display:flex;gap:8px}.search{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 13px;border-radius:9px;width:210px;outline:none}.wrap{max-width:1240px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:220px minmax(0,1fr) 270px;gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}.side-title,.section-head{padding:15px 16px;border-bottom:1px solid var(--line);font-weight:750;display:flex;align-items:center;justify-content:space-between}.muted{color:var(--muted)}.side-item{padding:11px 14px;display:flex;align-items:center;gap:10px;color:#cbd2dc;border-bottom:1px solid #252d38;cursor:pointer}.side-item:hover,.side-item.selected{background:#242d39;color:white}.flag{font-size:18px;width:22px}.league{padding:12px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;font-weight:650}.league small{margin-left:auto;color:var(--muted);font-weight:500}
+.content{min-width:0}.tabs{display:flex;gap:7px;margin-bottom:15px;overflow:auto}.tabs button{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:10px 15px;border-radius:9px;white-space:nowrap}.tabs button.active{background:var(--green);border-color:var(--green);color:#17200e;font-weight:800}
+.datebar{display:flex;align-items:center;gap:8px;margin-bottom:14px}.datebar button{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:8px}.datebar .today{margin-left:auto;color:var(--green);border-color:#536b3c}
+.match{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:74px minmax(0,1fr) 52px;gap:10px;align-items:center;cursor:pointer}.match:last-child{border-bottom:0}.match:hover{background:#202733}.time{text-align:center;color:var(--muted);font-size:12px}.live{color:var(--red);font-weight:800}.teams{display:grid;gap:9px}.team{display:flex;align-items:center;gap:9px;min-width:0}.team .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crest{width:22px;height:22px;border-radius:50%;background:#303b49;display:grid;place-items:center;font-size:12px}.score{text-align:right;font-size:15px;font-weight:800;line-height:1.9}.star{color:#687484;font-size:19px}.star.on{color:var(--green)}.match-head{padding:11px 15px;background:#202733;color:#dce4ed;font-size:12px;display:flex;gap:8px;align-items:center}.match-head span:last-child{margin-left:auto;color:var(--muted)}
+.right-card{padding:15px}.right-card h3{margin:0 0 13px;font-size:15px}.news{padding:12px 0;border-top:1px solid var(--line);line-height:1.4}.news small{display:block;color:var(--muted);margin-top:6px}.stand{width:100%;border-collapse:collapse;font-size:12px}.stand th,.stand td{padding:9px 7px;text-align:center;border-bottom:1px solid var(--line)}.stand th{color:var(--muted);font-weight:600}.stand td:nth-child(2){text-align:left}.stand tr:last-child td{border:0}.green{color:var(--green)}.pill{background:#273321;color:var(--green);padding:4px 7px;border-radius:5px;font-size:10px;font-weight:800}
+.bottom{display:none}.empty{padding:35px;text-align:center;color:var(--muted)}
+.modal-bg{display:none;position:fixed;inset:0;background:#000a;z-index:10;align-items:center;justify-content:center;padding:18px}.modal{width:min(570px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}.modal-top{display:flex;justify-content:space-between}.close{background:var(--panel2);border:0;color:white;border-radius:8px;padding:6px 10px}.bigscore{display:flex;align-items:center;justify-content:space-around;text-align:center;padding:25px 0}.bigscore strong{font-size:34px}.stat{display:flex;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--line);color:var(--muted)}.stat b{color:var(--text)}
+@media(max-width:980px){.wrap{grid-template-columns:190px minmax(0,1fr)}.rightcol{display:none}.search{width:160px}}
+@media(max-width:650px){.top{height:60px;padding:0 13px;gap:12px}.nav{display:none}.search{width:min(43vw,180px)}.wrap{display:block;margin:14px auto;padding:0 11px}.leftcol{display:none}.match{grid-template-columns:55px minmax(0,1fr) 38px;padding:13px 10px}.match-head{padding:10px}.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#171c24;border-top:1px solid var(--line);justify-content:space-around;padding:10px 4px;z-index:4}.bottom button{background:none;border:0;color:var(--muted);font-size:11px}.bottom button.active{color:var(--green)}body{padding-bottom:54px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="logo">SCORE<b>ZONE</b></div>
+  <nav class="nav"><button class="active" data-page="scores">Natijalar</button><button data-page="leagues">Turnirlar</button><button data-page="favorites">Sevimlilar</button></nav>
+  <div class="right"><input id="search" class="search" placeholder="Jamoa yoki liga qidirish..."><button title="Bildirishnomalar">♧</button></div>
+</header>
+<div class="wrap">
+ <aside class="leftcol panel">
+  <div class="side-title">Sport turlari</div>
+  <div class="side-item selected"><span class="flag">⚽</span> Futbol</div>
+  <div class="side-item"><span class="flag">🏀</span> Basketbol</div>
+  <div class="side-item"><span class="flag">🎾</span> Tennis</div>
+  <div class="side-item"><span class="flag">🏐</span> Voleybol</div>
+  <div class="side-item"><span class="flag">🏒</span> Xokkey</div>
+  <div class="side-title">Mashhur ligalar <small class="muted">☆</small></div>
+  <div class="side-item"><span class="flag">🏴</span> Premier League</div>
+  <div class="side-item"><span class="flag">🇪🇸</span> La Liga</div>
+  <div class="side-item"><span class="flag">🇩🇪</span> Bundesliga</div>
+  <div class="side-item"><span class="flag">🇮🇹</span> Serie A</div>
+  <div class="side-item"><span class="flag">🇫🇷</span> Ligue 1</div>
+  <div class="side-item"><span class="flag">🌍</span> Chempionlar ligasi</div>
+ </aside>
+ <main class="content">
+  <div class="tabs"><button class="active" data-filter="all">Barchasi</button><button data-filter="live">🔴 Jonli</button><button data-filter="scheduled">Rejalashtirilgan</button><button data-filter="finished">Yakunlangan</button></div>
+  <div class="datebar"><button>‹</button><button class="today">BUGUN · 24-NOYABR</button><button>›</button><button>▦</button></div>
+  <section class="panel" id="matches">
+   <div class="match-head"><span>🇬🇧</span><b>ANGLIYA · PREMIER LEAGUE</b><span>☆</span></div>
+   <div class="match" data-status="live" data-teams="manchester city liverpool"><div class="time"><div class="live">68'</div><small>2-bo‘lim</small></div><div class="teams"><div class="team"><span class="crest">🔵</span><span class="name">Manchester City</span></div><div class="team"><span class="crest">🔴</span><span class="name">Liverpool</span></div></div><div class="score">2<br>1</div><div class="star">☆</div></div>
+   <div class="match" data-status="scheduled" data-teams="arsenal chelsea"><div class="time">20:30<small class="muted"><br>Bugun</small></div><div class="teams"><div class="team"><span class="crest">🔴</span><span class="name">Arsenal</span></div><div class="team"><span class="crest">🔵</span><span class="name">Chelsea</span></div></div><div class="score">—<br>—</div><div class="star">☆</div></div>
+   <div class="match-head"><span>🇪🇸</span><b>ISPANIYA · LA LIGA</b><span>☆</span></div>
+   <div class="match" data-status="finished" data-teams="real madrid barcelona"><div class="time">Yakunlandi</div><div class="teams"><div class="team"><span class="crest">⚪</span><span class="name">Real Madrid</span></div><div class="team"><span class="crest">🔴</span><span class="name">Barcelona</span></div></div><div class="score">3<br>2</div><div class="star">☆</div></div>
+   <div class="match-head"><span>🇩🇪</span><b>GERMANIYA · BUNDESLIGA</b><span>☆</span></div>
+   <div class="match" data-status="scheduled" data-teams="bayern munich borussia dortmund"><div class="time">22:00<small class="muted"><br>Bugun</small></div><div class="teams"><div class="team"><span class="crest">🔴</span><span class="name">Bayern Munich</span></div><div class="team"><span class="crest">🟡</span><span class="name">Borussia Dortmund</span></div></div><div class="score">—<br>—</div><div class="star">☆</div></div>
+   <div class="match-head"><span>🌍</span><b>YEVROPA · CHEMPIONLAR LIGASI</b><span>☆</span></div>
+   <div class="match" data-status="live" data-teams="psg juventus"><div class="time"><div class="live">34'</div><small>1-bo‘lim</small></div><div class="teams"><div class="team"><span class="crest">🔵</span><span class="name">Paris Saint-Germain</span></div><div class="team"><span class="crest">⚫</span><span class="name">Juventus</span></div></div><div class="score">1<br>0</div><div class="star">☆</div></div>
+  </section>
+  <section class="panel" id="leagueTable" style="display:none;margin-top:15px">
+   <div class="section-head">🏆 Premier League <span class="muted">2026/27</span></div>
+   <table class="stand"><thead><tr><th>#</th><th>Jamoa</th><th>O</th><th>G</th><th>D</th><th>M</th><th>Ochko</th></tr></thead><tbody>
+   <tr><td>1</td><td>🔴 Arsenal</td><td>12</td><td>9</td><td>2</td><td>1</td><td class="green">29</td></tr><tr><td>2</td><td>🔵 Man City</td><td>12</td><td>9</td><td>1</td><td>2</td><td>28</td></tr><tr><td>3</td><td>🔴 Liverpool</td><td>12</td><td>8</td><td>2</td><td>2</td><td>26</td></tr><tr><td>4</td><td>🔵 Chelsea</td><td>12</td><td>7</td><td>3</td><td>2</td><td>24</td></tr><tr><td>5</td><td>⚪ Tottenham</td><td>12</td><td>6</td><td>3</td><td>3</td><td>21</td></tr></tbody></table>
+  </section>
+  <section class="panel" id="favoritesPanel" style="display:none;margin-top:15px"><div class="section-head">⭐ Sevimli o‘yinlaringiz</div><div class="empty">Yulduzchani bosib o‘yinlarni sevimlilarga qo‘shing.</div></section>
+ </main>
+ <aside class="rightcol">
+  <section class="panel right-card"><h3>🏆 Turnir jadvali</h3><div class="muted" style="margin-bottom:10px">Premier League · Top 5</div><table class="stand"><tr><th>#</th><th>Jamoa</th><th>O</th></tr><tr><td>1</td><td>Arsenal</td><td>29</td></tr><tr><td>2</td><td>Man City</td><td>28</td></tr><tr><td>3</td><td>Liverpool</td><td>26</td></tr><tr><td>4</td><td>Chelsea</td><td>24</td></tr><tr><td>5</td><td>Tottenham</td><td>21</td></tr></table><p class="muted" style="font-size:11px">Namuna ma’lumotlar</p></section>
+  <section class="panel right-card" style="margin-top:15px"><h3>📰 Sport yangiliklari</h3><div class="news">Yevropa futbolida bugungi asosiy uchrashuvlar<small>Futbol · 2 soat oldin</small></div><div class="news">Transfer bozoridagi so‘nggi xabarlar<small>Transferlar · 4 soat oldin</small></div><div class="news">Chempionlar ligasi: navbatdagi tur<small>UCL · 6 soat oldin</small></div></section>
+ </aside>
+</div>
+<nav class="bottom"><button class="active" data-page="scores">⚽<br>Natijalar</button><button data-page="leagues">🏆<br>Turnirlar</button><button data-page="favorites">⭐<br>Sevimlilar</button></nav>
+<div class="modal-bg" id="modal"><div class="modal"><div class="modal-top"><b>O‘YIN MA’LUMOTLARI</b><button class="close" id="close">✕</button></div><div class="bigscore"><div><div style="font-size:30px">🔵</div><b id="home">Jamoa 1</b></div><strong id="result">2 : 1</strong><div><div style="font-size:30px">🔴</div><b id="away">Jamoa 2</b></div></div><div class="stat"><span>To‘pga egalik</span><b>58% — 42%</b></div><div class="stat"><span>Zarbalar</span><b>12 — 8</b></div><div class="stat"><span>Darvozaga aniq zarbalar</span><b>6 — 3</b></div><div class="stat"><span>Burchak zarbalari</span><b>5 — 2</b></div><p class="muted" style="font-size:11px">Bu demo sahifa: statistikalar namuna sifatida keltirilgan.</p></div></div>
+<script>
+const matches=[...document.querySelectorAll('.match')];let filter='all';
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;matches.forEach(m=>m.style.display=(filter==='all'||m.dataset.status===filter)?'grid':'none')});
+document.querySelectorAll('.star').forEach(s=>s.onclick=e=>{e.stopPropagation();s.classList.toggle('on');s.textContent=s.classList.contains('on')?'★':'☆';updateFav()});
+function updateFav(){let fav=matches.filter(m=>m.querySelector('.star').classList.contains('on'));let p=document.querySelector('#favoritesPanel');p.innerHTML='<div class="section-head">⭐ Sevimli o‘yinlaringiz</div>'+(fav.length?fav.map(m=>'<div class="match">'+m.querySelector('.teams').innerHTML+'<b>'+m.querySelector('.score').innerHTML+'</b></div>').join(''):'<div class="empty">Yulduzchani bosib o‘yinlarni sevimlilarga qo‘shing.</div>')}
+document.querySelector('#search').addEventListener('input',e=>{let q=e.target.value.toLowerCase();matches.forEach(m=>m.style.display=m.dataset.teams.includes(q)?'grid':'none');document.querySelectorAll('.match-head').forEach(h=>h.style.display=q?'none':'flex')});
+function page(p){document.querySelector('#matches').style.display=p==='scores'?'block':'none';document.querySelector('#leagueTable').style.display=p==='leagues'?'block':'none';document.querySelector('#favoritesPanel').style.display=p==='favorites'?'block':'none';document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p))}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>page(b.dataset.page));
+matches.forEach(m=>m.onclick=()=>{let t=m.querySelectorAll('.name');document.querySelector('#home').textContent=t[0].textContent;document.querySelector('#away').textContent=t[1].textContent;document.querySelector('#result').textContent=m.querySelector('.score').innerText.replace(/\n/,' : ');document.querySelector('#modal').style.display='flex'});
+document.querySelector('#close').onclick=()=>document.querySelector('#modal').style.display='none';document.querySelector('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.style.display='none'};
+</script>
+</body></html>
